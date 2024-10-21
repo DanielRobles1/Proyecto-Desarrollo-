@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const mongoose = require('mongoose');
+
 
 // Registrar usuario
 exports.register = async (req, res) => {
@@ -67,5 +69,67 @@ exports.getProfile = async (req, res) => {
         res.json(user);
     } catch (error) {
         res.status(500).json({ message: 'Error al obtener el perfil: ' + error.message });
+    }
+};
+//borrar
+exports.deleteus = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        console.log('ID recibido:', userId);//para saber si recibe el id
+
+        // Valida si el ID es un ObjectId válido
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            console.log('ID no válido');
+            return res.status(400).json({ message: 'ID inválido' });
+        }
+
+        // Buscar usuario por ID
+        const user = await User.findById(userId);
+        console.log('Usuario encontrado:', user); // Imprime el usuario encontrado o null
+
+        if (!user) {
+            console.log('Usuario no encontrado');
+            return res.status(404).json({ message: 'Recurso no encontrado' });
+        }
+
+        // Eliminar usuario si existe
+        await User.findByIdAndDelete(userId);
+        console.log('Usuario eliminado correctamente');
+        res.status(200).json({ message: 'Usuario eliminado correctamente' });
+    } catch (error) {
+        console.error('Error al eliminar el usuario:', error); //imprime error asi vemos como solucionar
+        res.status(500).json({ message: 'Error al eliminar el usuario', error });
+    }
+};
+
+//Actualizar
+exports.actuauser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        console.log('ID recibido:', userId); //para saber si recibe el id
+
+        
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            console.log('ID no válido');
+            return res.status(400).json({ message: 'ID inválido' });
+        }
+
+        // Buscar usuario por ID
+        const user = await User.findById(userId);
+        console.log('Usuario encontrado:', user); // Imprimir el usuario encontrado o null
+
+        if (!user) {
+            console.log('Usuario no encontrado');
+            return res.status(404).json({ message: 'Recurso no encontrado' });
+        }
+
+        // Actualizar usuario si existe
+        const updatedUser = await User.findByIdAndUpdate(userId, req.body, { new: true }); 
+        console.log('Usuario actualizado correctamente', updatedUser); // Imprimir el usuario actualizado
+
+        res.status(200).json({ message: 'Usuario actualizado correctamente', user: updatedUser });
+    } catch (error) {
+        console.error('Error al actualizar el usuario:', error); // Imprimir el error
+        res.status(500).json({ message: 'Error interno del servidor' }); 
     }
 };
