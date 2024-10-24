@@ -122,7 +122,7 @@ exports.actuauser = async (req, res) => {
             console.log('Usuario no encontrado');
             return res.status(404).json({ message: 'Recurso no encontrado' });
         }
-
+//hh
         // Actualizar usuario si existe
         const updatedUser = await User.findByIdAndUpdate(userId, req.body, { new: true }); 
         console.log('Usuario actualizado correctamente', updatedUser); // Imprimir el usuario actualizado
