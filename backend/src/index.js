@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 4001;
 
 // Middleware
-app.use(cors()); // Habilitar CORS
+app.use(cors()); // Habilitar CORShhh
 app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/producto', productosRouter);
