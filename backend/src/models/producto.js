@@ -5,7 +5,7 @@ const productoSchema = new mongoose.Schema({
 name:{type:String, require:true},
 descripcion:{type:String,require:true},
 precio:{type:Number, require:true},
-stock:{type:Number, require:true}
+Imagen:{type:Number, require:true}
 
 
 });
